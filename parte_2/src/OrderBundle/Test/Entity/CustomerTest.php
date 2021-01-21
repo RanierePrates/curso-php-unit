@@ -7,25 +7,25 @@ use PHPUnit\Framework\TestCase;
 
 class CustomerTest extends TestCase
 {
+
     /**
-     * @test
-     * @dataProvider customerAllowedDataProvider
+     * @dataProvider customerAllowedProvider
      */
-    public function isAllowedToOrder($isActive, $isBlocked, $expectedAlloed)
+    public function testIsAllowerdToOrder($isActive, $isBlocked, $expectedAllowed)
     {
         $customer = new Customer(
             $isActive,
             $isBlocked,
-            'Vinicius Oliveira',
-            '+5511955558888'
+            'Raniere Prates',
+            '+5511958746932'
         );
 
         $isAllowed = $customer->isAllowedToOrder();
 
-        $this->assertEquals($expectedAlloed, $isAllowed);
+        $this->assertEquals($expectedAllowed, $isAllowed);
     }
 
-    public function customerAllowedDataProvider()
+    public function customerAllowedProvider()
     {
         return [
             'shouldBeAllowedWhenIsActiveAndNotBlocked' => [
@@ -45,10 +45,10 @@ class CustomerTest extends TestCase
             ],
             'shouldNotBeAllowedWhenIsNotActiveAndIsBlocked' => [
                 'isActive' => false,
-                'isBlocked' => true,
+                'isBlocked' => false,
                 'expectedAllowed' => false
             ]
         ];
     }
-}
 
+}
