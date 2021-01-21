@@ -1,6 +1,6 @@
 <?php
 
-namespace OrderBundle\Validators\Test;
+namespace OrderBundle\Test\Validators;
 
 use DateTime;
 use OrderBundle\Validators\CreditCardExpirationValidator;
