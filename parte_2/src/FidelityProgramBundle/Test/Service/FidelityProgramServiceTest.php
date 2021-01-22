@@ -26,12 +26,30 @@ class FidelityProgramServiceTest extends TestCase
         $pointsCalculator->method('calculatePointsToReceive')
             ->willReturn(100);
 
+        $allMessages = [];
+        $loggerInterface->method('log')
+            ->will($this->returnCallBack(
+                function ($message) use (&$allMessages) {
+                    $allMessages[] = $message;
+                }
+            ));
+
+        $pointsCalculator->method('calculatePointsToReceive')
+            ->willReturn(0);
+
         $fidelityProgramService = new FidelityProgramService($pointsRepository, $pointsCalculator, $loggerInterface);
 
         $customer = $this->createMock(Customer::class);
         $value = 50;
 
         $fidelityProgramService->addPoints($customer, $value);
+
+        $expectedMessages = [
+            'Checking points for customer',
+            'Customer received points'
+        ];
+
+        $this->assertEquals($expectedMessages, $allMessages);
     }
 
     /**
@@ -47,6 +65,14 @@ class FidelityProgramServiceTest extends TestCase
         $pointsCalculator = $this->createMock(PointsCalculator::class);
         $loggerInterface = $this->createMock(LoggerInterface::class);
 
+        $allMessages = [];
+        $loggerInterface->method('log')
+            ->will($this->returnCallBack(
+                function ($message) use (&$allMessages) {
+                    $allMessages[] = $message;
+                }
+            ));
+
         $pointsCalculator->method('calculatePointsToReceive')
             ->willReturn(0);
 
@@ -56,5 +82,11 @@ class FidelityProgramServiceTest extends TestCase
         $value = 20;
 
         $fidelityProgramService->addPoints($customer, $value);
+
+        $expectedMessages = [
+            'Checking points for customer',
+        ];
+
+        $this->assertEquals($expectedMessages, $allMessages);
     }
 }
